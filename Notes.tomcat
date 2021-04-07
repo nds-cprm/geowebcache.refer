@@ -1,0 +1,38 @@
+
+1. APR use or not ?
+
+    This version of tomcat will use http only, all https is done by proxy, no SSL.
+
+2. APR is better than NIO ? 
+
+    No. 
+    
+    "The APR provides certain performance benefits over BIO, 
+    but no performance benefits over NIO, 
+    and also *no* functionality benefits 
+    - JIRA will function perfectly well without it."
+    https://confluence.atlassian.com/jirakb/jira-console-output-info-the-apr-based-apache-tomcat-native-library-which-allows-optimal-performance-in-production-environments-was-not-found-702711306.html
+
+    In https://tomcat.apache.org/tomcat-8.5-doc/config/http.html:
+    SSL Support - Connector - APR/Native (deprecated)
+
+3. APR is the only connector with sendfile I/O ?
+    
+    No. All NIO could use sendfile
+
+    Using sendfile breaks any use of zipping
+
+    Mind that APR and SSL tomcat libraries are created for Windows servers.
+
+4. Access Control ?
+
+	If you wish to use Tomcat’s web administration tool, you will need to create an account for the administrator.
+
+	Open /opt/apache-tomcat-a.b.c/conf/tomcat-users.xml in a text editor. Immediately after the line containing <tomcat-users>, insert:
+
+		<role rolename="manager"/>
+		<user username="tomcat" password="s3cret" roles="manager"/>
+
+	Replace s3cret with your actual password. 
+
+

@@ -1,0 +1,47 @@
+# vim:set ft=dockerfile:
+# ? have gosu, libnss-wrapper, procps
+FROM cprm.nds:tomcat.refer
+# FROM debian:buster-slim
+ENV LANG C.UTF8
+
+# sane 1
+RUN mkdir -p /usr/share/man/man1
+
+RUN set -eux; \
+    apt update; \
+	apt upgrade -y ; \
+	apt install -y wget unzip zip
+
+# simplify
+ENV JAVA_HOME /usr/lib/java
+
+# at 30/03/2021 geowebcache-1.18.2-war.zip 134f4860da7bfb3e98301083eacade39  download
+RUN set -eux; \
+	mkdir -p /opt/tomcat/webapps/geocache ; \
+	cd /opt/tomcat/webapps/geocache ; \
+	echo "134f4860da7bfb3e98301083eacade39  download" > md5 ; \
+	wget https://sourceforge.net/projects/geowebcache/files/geowebcache/1.18.2/geowebcache-1.18.2-war.zip/download ; \
+	md5sum -c md5 || exit ; \
+	unzip download ; rm download ; \
+	unzip geowebcache.war ; rm geowebcache.war
+
+# clean 
+RUN set -eux; \
+    apt autoremove -y ; \
+    apt clean -y ; \
+    rm -rf /var/lib/apt/lists/*
+
+#sane 2
+RUN rm -rf /usr/share/man/*
+
+#defaults
+
+WORKDIR /
+
+RUN mkdir -p /docker-entrypoint.d
+
+COPY docker-entrypoint.sh /
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+
