@@ -1,6 +1,6 @@
 # vim:set ft=dockerfile:
 # ? have gosu, libnss-wrapper, procps
-FROM cprm.nds:tomcat.refer
+FROM cprm.nds:tomcat2refer
 # FROM debian:buster-slim
 ENV LANG C.UTF8
 
@@ -17,8 +17,8 @@ ENV JAVA_HOME /usr/lib/java
 
 # at 30/03/2021 geowebcache-1.18.2-war.zip 134f4860da7bfb3e98301083eacade39  download
 RUN set -eux; \
-	mkdir -p /opt/tomcat/webapps/geocache ; \
-	cd /opt/tomcat/webapps/geocache ; \
+	mkdir -p /opt/tomcat/webapps/geowebcache ; \
+	cd /opt/tomcat/webapps/geowebcache ; \
 	echo "134f4860da7bfb3e98301083eacade39  download" > md5 ; \
 	wget https://sourceforge.net/projects/geowebcache/files/geowebcache/1.18.2/geowebcache-1.18.2-war.zip/download ; \
 	md5sum -c md5 || exit ; \

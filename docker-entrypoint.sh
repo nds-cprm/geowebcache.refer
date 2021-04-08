@@ -11,13 +11,6 @@ if [ "${1:0:1}" = '-' ]; then
 
 fi
 
-# allow the container to be started with `--user`
-if [ "${1}" =  "--user" ] && [ "$(id -u)" = '0' ]; then
-
-    echo gosu $1 "$BASH_SOURCE" "$@"
-
-fi
-
 # allow the scripts from pseudo init directory
 if [ -d "/docker-entrypoint.d/" ]; then
     for f in /docker-entrypoint.d/*; do
@@ -46,14 +39,17 @@ export CATALINA_HOME=/usr/share/tomcat9
 export CATALINA_BASE=/opt/tomcat
 
 export JAVA_OPTS="-server -Djava.awt.headless=true -server \
+	-Djava.security.egd=file:/dev/./urandom \
+	-Xms512m -Xmx2024m -XX:NewSize=512m -XX:MaxNewSize=1024m \
     -XX:PerfDataSamplingInterval=500 -XX:SoftRefLRUPolicyMSPerMB=36000 -XX:NewRatio=2 \
-	-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:ParallelGCThreads=20 -XX:ConcGCThreads=5 \
+	-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:ParallelGCThreads=20 -XX:ConcGCThreads=4 \
     -XX:InitiatingHeapOccupancyPercent=70 -XX:+CMSClassUnloadingEnabled"
+
 
 export GEOSERVER_OPTS=\
 		"-Dorg.geotools.referencing.forceXY=true \
-         -Dorg.geotools.shapefile.datetime=true -Dgeoserver.login.autocomplete=off \
-         -DGEOSERVER_CONSOLE_DISABLED=${GEOSERVER_WEB_UI_DISABLED:-FALSE}"
+         -Dorg.geotools.shapefile.datetime=true \
+		 -Dgeoserver.login.autocomplete=off "
 
 export JAVA_OPTS="${JAVA_OPTS} ${GEOSERVER_OPTS}"
 
