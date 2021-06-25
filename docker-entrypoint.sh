@@ -33,11 +33,6 @@ fi
 
 
 # especific
-
-export CATALINA_HOME=/usr/share/tomcat9
-
-export CATALINA_BASE=/opt/tomcat
-
 export JAVA_OPTS="-server -Djava.awt.headless=true -server \
 	-Djava.security.egd=file:/dev/./urandom \
 	-Xms512m -Xmx2024m -XX:NewSize=512m -XX:MaxNewSize=1024m \
@@ -45,15 +40,12 @@ export JAVA_OPTS="-server -Djava.awt.headless=true -server \
 	-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:ParallelGCThreads=20 -XX:ConcGCThreads=4 \
     -XX:InitiatingHeapOccupancyPercent=70 -XX:+CMSClassUnloadingEnabled"
 
-
 export GEOSERVER_OPTS=\
 		"-Dorg.geotools.referencing.forceXY=true \
          -Dorg.geotools.shapefile.datetime=true \
 		 -Dgeoserver.login.autocomplete=off "
 
 export JAVA_OPTS="${JAVA_OPTS} ${GEOSERVER_OPTS}"
-
-# especific
 
 exec $CATALINA_HOME/bin/catalina.sh run
 
