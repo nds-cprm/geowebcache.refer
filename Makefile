@@ -2,13 +2,13 @@
 # Set variables to pass
 #
 
-name_it = geocache
+name_it = geowebcache
 
 # if need use: ports = "-p 0:0"
 
-ports = "-p 8080:8082" 
+ports = -p 8080:8080
 
-image_tag = cprm.nds:$(name_it).refer
+image_tag = ndscprm/$(name_it):refer
 
 my_date = $(shell date +%Y%m%d-%H%M%S )
 
@@ -28,7 +28,7 @@ docker_name = $(name_it).$(docker_uid)
 # make what to make
 #
 
-auto-up: build up 
+auto-up: up 
 
 up: build
 
